@@ -1,6 +1,6 @@
 import discord
 
-TOKEN = 'NjMxMDM5MzM0OTcxMzQyODQ4.XZxLEA.oTKm6lqn45WcPVcartWMnZ55Lmk'
+TOKEN = open("token", "r").read()
 
 prefix = 'k!'
 
