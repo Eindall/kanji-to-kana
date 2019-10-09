@@ -11,8 +11,12 @@ command_list = discord.Embed(title="**__Command List__**", description="*Command
 command_list.add_field(name="**help**", value="> Gives a list of every available commands", inline=False)
 command_list.add_field(name="**about**", value="> Gives infos about the bot and its creator", inline=False)
 
-about = discord.Embed(color=MAIN_COLOR)
-about.add_field(name="**About KanjiToKana Bot**", value="KanjiToKana is a bot created in order to help people that wants to learn Japanese. It has been created by Eindall#2121, feel free to add me if you have any question or would like to submit a feature request")
+about = discord.Embed(title="**__Command List__**", description="[Invite link]({})".format(discord.utils.oauth_url(631039334971342848)), color=MAIN_COLOR)
+about.add_field(name="**Created on**", value="October 8th, 2019")
+about.add_field(name="**Version**", value="0.0.0")
+about.add_field(name="**Created by**", value="Eindall#2121 (Discord ID: 188621082192773120)")
+about.add_field(name="**Library**", value="[discord.py](https://github.com/Rapptz/discord.py) v{}".format(discord.__version__))
+about.set_footer(text="KanjiToKana is a bot created in order to help people that wants to learn Japanese. Feel free to add the creator if you have any question or would like to submit a feature request")
 
 class Client(discord.Client):
   async def on_ready(self):
@@ -29,6 +33,8 @@ class Client(discord.Client):
         await message.channel.send(embed=command_list)
 
       if args[0] == prefix + "about":
+        about.set_thumbnail(url=self.user.avatar_url)
+        about.set_author(name="KanjiToKanaBot (Discord ID: {})".format(self.user.id), icon_url=self.user.avatar_url)
         await message.channel.send(embed=about)
 
 
