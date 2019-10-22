@@ -11,12 +11,7 @@ def webm_to_gif(input_filename, output_filename):
     process = (
         ffmpeg
         .input(input_filename, f=input_format[1:])
-        .output(output_filename, f=output_format[1:], pix_fmt="rgb24")
-        .run_async()
+        .output(output_filename, f=output_format[1:], pix_fmt="rgb8")
+        .run_async(pipe_stdout=True, pipe_stderr=True)
     )
-
-    _, cerr = process.communicate(input=sys.stdout) # Streams standard output and stores error output
     process.wait() # Wait until process finishes
-
-    if (cerr):
-        print(cerr)
