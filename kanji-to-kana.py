@@ -1,6 +1,7 @@
 import discord
 import requests
 import os
+import webm_to_gif
 
 TOKEN = open("token", "r").read()
 
@@ -57,12 +58,15 @@ class Client(discord.Client):
           if 'error' in request:
             await message.channel.send("I'm sorry <@" + str(message.author.id) + ">, but I couldn't find this kanji...")
           else:
+            webm_to_gif.webm_to_gif(request['kanji']['video']['webm'], request['kanji']['onyomi']['romaji'] + ".gif")
+            kanji_gif = discord.File(request['kanji']['onyomi']['romaji'] + ".gif", filename=request['kanji']['onyomi']['romaji'] + ".gif")
             card = discord.Embed(title="Kanji Card - " + request['kanji']['character'], description=request['kanji']['meaning']['english'])
-            card.set_image(url="http://kanji.nihongo.cz/image.php?text=" + request['kanji']['character'] + "&font=sod.ttf&fontsize=300&color=white")
+            card.set_image(url='attachment://' + request['kanji']['onyomi']['romaji'] + ".gif")
             card.add_field(name="Pronounciation", value=request['kanji']['kunyomi']['hiragana'] + ' (' + request['kanji']['kunyomi']['romaji'] + ') | ' + request['kanji']['onyomi']['katakana'] + ' (' + request['kanji']['onyomi']['romaji'] + ')', inline=False)
             if 'radical' in request:
               card.add_field(name="Radical", value=request['radical']['character'] + " [" + request['radical']['name']['hiragana'] + " (" + request['radical']['name']['romaji'] + ")]")
-            await message.channel.send(embed=card)
+            await message.channel.send(file=kanji_gif, embed=card)
+            os.remove(request['kanji']['onyomi']['romaji'] + ".gif")
 
       # Test lol eussou
       if args[0] == prefix + "test":
