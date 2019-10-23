@@ -68,14 +68,13 @@ class Client(discord.Client):
             await message.channel.send(file=kanji_gif, embed=card)
             os.remove(request['kanji']['onyomi']['romaji'] + ".gif")
 
-      # Test lol eussou
-      if args[0] == prefix + "test":
-        embed=discord.Embed(title="Kanji Card - 私", url="https://jisho.org/search/%E7%A7%81%20%23kanji", description="private, I, me")
-        embed.set_image(url="http://kanji.nihongo.cz/image.php?text=%E7%A7%81&font=sod.ttf&fontsize=300&color=white")
-        embed.add_field(name="Pronounciation", value="わたし (watashi) | し (SHI)", inline=False)
-        embed.add_field(name="Key(s)", value="厶 (28) | 禾 (115)", inline=False)
-        await message.channel.send(embed=embed)
-
+      # Kana commands
+      if args[0] == prefix + "katakana":
+        katakana_table = discord.File('img/katakana.jpg')
+        await message.channel.send("<@" + str(message.author.id) + ">, here is the katakana table. Feel free to download it !", file=katakana_table)
+      elif args[0] == prefix + "hiragana":
+        hiragana_table = discord.File('img/hiragana.jpg')
+        await message.channel.send("<@" + str(message.author.id) + ">, here is the hiragana table. Feel free to download it !", file=hiragana_table)
 
 client = Client()
 client.run(TOKEN)
