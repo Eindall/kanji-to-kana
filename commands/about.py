@@ -1,9 +1,9 @@
+import globals
 import discord
 import requests
-import globals
 from pprint import pprint
 
-def run(client, message):
+async def run(client, message, args):
     about = discord.Embed(title="**__Command List__**", description="[Invite link]({})".format(discord.utils.oauth_url(631039334971342848)), color=globals.MAIN_COLOR)
     about.add_field(name="**Created on**", value="October 8th, 2019")
     about.add_field(name="**Version**", value="0.1.0")
@@ -13,4 +13,4 @@ def run(client, message):
     about.set_thumbnail(url=client.user.avatar_url)
     about.set_author(name="KanjiToKanaBot (Discord ID: {})".format(client.user.id), icon_url=client.user.avatar_url)
 
-    return message.channel.send(embed=about)
+    return await message.channel.send(embed=about)

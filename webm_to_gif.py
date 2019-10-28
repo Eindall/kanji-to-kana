@@ -14,4 +14,4 @@ def webm_to_gif(input_filename, output_filename):
         .output(output_filename, f=output_format[1:], pix_fmt="rgb8")
         .run_async(pipe_stdout=True, pipe_stderr=True)
     )
-    process.wait() # Wait until process finishes
+    process.wait()

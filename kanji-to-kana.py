@@ -1,23 +1,17 @@
 import discord
+import globals
 import requests
 import sys, os, subprocess
-import webm_to_gif
 import importlib
 
 TOKEN = open("token", "r").read()
-API_KEY = open("api_key", "r").read()
-MAIN_COLOR = 0x673e74
 
 prefix = '&'
-api_headers = {
-  "x-rapidapi-host": "kanjialive-api.p.rapidapi.com",
-  "x-rapidapi-key": API_KEY
-}
 
 commands_dir = "commands"
 commands = {}
 
-command_list = discord.Embed(title="**__Command List__**", description="*Command's prefix : &*", color=MAIN_COLOR)
+command_list = discord.Embed(title="**__Command List__**", description="*Command's prefix : &*", color=globals.MAIN_COLOR)
 command_list.add_field(name="**help**", value="> Gives a list of every available commands", inline=False)
 command_list.add_field(name="**about**", value="> Gives infos about the bot and its creator", inline=False)
 
@@ -45,17 +39,22 @@ class Client(discord.Client):
   async def on_message(self, message):
     if message.author == self.user or message.author.bot:
       return
+
     if message.content[0] == prefix:
       args = message.content.split(' ')
+      command = args[0][1:]
+      args = args[1:]
 
-      # Help command
+      if commands[command]:
+        print("Command \"%s\" called by %s" % (command, message.author.name))
+        return await commands[command].run(self, message, args)
+
+      print("Command %s not found", command)
+
+      '''# Help command
       if args[0] == prefix + "help":
         await message.channel.send("<@" + str(message.author.id) + ">, here are the bot's commands : ")
         await message.channel.send(embed=command_list)
-
-      # About command
-      if args[0] == prefix + "about":
-        await commands["about"].run(self, message)
 
       # Kanji command
       if args[0] == prefix + "kanji":
@@ -83,7 +82,7 @@ class Client(discord.Client):
         await message.channel.send("<@" + str(message.author.id) + ">, here is the katakana table. Feel free to download it !", file=katakana_table)
       elif args[0] == prefix + "hiragana":
         hiragana_table = discord.File('img/hiragana.jpg')
-        await message.channel.send("<@" + str(message.author.id) + ">, here is the hiragana table. Feel free to download it !", file=hiragana_table)
+        await message.channel.send("<@" + str(message.author.id) + ">, here is the hiragana table. Feel free to download it !", file=hiragana_table)'''
 
 client = Client()
 client.run(TOKEN)
