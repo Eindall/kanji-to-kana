@@ -42,4 +42,4 @@ async def run(client, message, args):
     try:
         os.remove(gif_filename)
     except OSError as err:
-        G.logger.warn("OSError: %s" % err, file=sys.stderr)
+        G.logger.warn("OSError: %s" % err)
