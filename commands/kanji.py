@@ -1,7 +1,7 @@
 import globals
 import discord
 import requests
-import webm_to_gif
+from utils import webm_to_gif
 import os
 
 async def run(client, message, args):
