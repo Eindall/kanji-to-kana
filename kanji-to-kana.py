@@ -32,7 +32,7 @@ class Client(discord.Client):
     print("Logged on as ", self.user)
     await client.change_presence(status=discord.Status.online, activity=discord.Game(name="some weeb shit"))
   async def on_message(self, message):
-    if message.author == self.user:
+    if message.author == self.user or message.author.bot:
       return
     if message.content[0] == prefix:
       args = message.content.split(' ')
