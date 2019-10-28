@@ -1,18 +1,21 @@
-import globals
+import globals as G
 import discord
 import requests
-from utils import webm_to_gif
 import os
+from utils import webm_to_gif
+from utils.log import Level
 
 async def run(client, message, args):
     if not args:
+        G.logger.warn("No kanji given as argument. Arguments : {}".format(args))
         return await message.channel.send("<@" + str(message.author.id) + "> No kanji given as argument.")
 
     kanji = args[0]
-    request = requests.get(globals.api["url"] + kanji, headers=globals.api["headers"])
+    request = requests.get(G.api["url"] + kanji, headers=G.api["headers"])
     request = request.json()
         
     if 'error' in request:
+        G.logger.warn("API could not found kanji \"{}\"".format(args[0]))
         return await message.channel.send("I'm sorry <@" + str(message.author.id) + ">, but I couldn't find this kanji...")
 
     # Request simplified
@@ -35,9 +38,8 @@ async def run(client, message, args):
         card.add_field(name="Radical", value=request['radical']['character'] + " [" + hiragana + " (" + request['radical']['name']['romaji'] + ")]")
     
     await message.channel.send(file=kanji_gif, embed=card)
-    print("Kanji embed sent")
     
     try:
         os.remove(gif_filename)
     except OSError as err:
-        print("OSError: %s" % err, file=sys.stderr)
+        G.logger.warn("OSError: %s" % err, file=sys.stderr)

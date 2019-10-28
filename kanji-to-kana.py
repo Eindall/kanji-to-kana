@@ -1,18 +1,19 @@
-import globals
+import globals as G
 import discord
 import requests
 import sys, os, subprocess
 import importlib
+from utils.log import Level
 
 TOKEN = open("token", "r").read()
-
 prefix = '&'
-
 commands_dir = "commands"
 commands = {}
 
 class Client(discord.Client):
   async def on_ready(self):
+    G.logger.setLevel(Level.INFO)
+
     # List files in directory "/commands"
     files = os.listdir(os.path.dirname(os.path.abspath(__file__)) + "/" + commands_dir)
 
@@ -20,13 +21,13 @@ class Client(discord.Client):
       if not module == "__init__.py" and module[-3:] == ".py":
         try:
           commands[module[:-3]] = importlib.import_module(commands_dir + "." + module[:-3])
-          print("Loaded command %s" % module)
+          G.logger.info("Loaded command %s" % module)
         except ModuleNotFoundError as err:
-          print("ModuleNotFoundError: %s" % err, file=sys.stderr)
+          G.logger.warn("ModuleNotFoundError: %s" % err)
         except FileNotFoundError as err:
-          print("FileNotFoundError: %s" % err, file=sys.stderr)
+          G.logger.warn("FileNotFoundError: %s" % err)
 
-    print("Logged on as ", self.user)
+    G.logger.info("Logged on as %s" % self.user)
     await client.change_presence(status=discord.Status.online, activity=discord.Game(name="some weeb shit"))
 
   async def on_message(self, message):
@@ -38,11 +39,12 @@ class Client(discord.Client):
       command = args[0][1:]
       args = args[1:]
 
-      if commands[command]:
-        print("Command \"%s\" called by %s" % (command, message.author.name))
+      G.logger.info("Command \"%s\" called by %s" % (command, message.author.name))
+      
+      if command in commands:
         return await commands[command].run(self, message, args)
 
-      print("Command %s not found", command)
+      G.logger.warn("Command %s not found" % command)
 
 client = Client()
 client.run(TOKEN)
