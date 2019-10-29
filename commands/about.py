@@ -1,7 +1,6 @@
 import globals
 import discord
 import requests
-from pprint import pprint
 
 async def run(client, message, args):
     about = discord.Embed(title="**__Command List__**", description="[Invite link]({})".format(discord.utils.oauth_url(631039334971342848)), color=globals.MAIN_COLOR)
