@@ -3,7 +3,8 @@ from utils import log
 
 api = {}
 api["key"] = open("api_key", "r").read()
-api["url"] = 'https://kanjialive-api.p.rapidapi.com/api/public/kanji/'
+api["kanji_url"] = 'https://kanjialive-api.p.rapidapi.com/api/public/kanji/'
+api["search_url"] = 'https://kanjialive-api.p.rapidapi.com/api/public/search/advanced/'
 api["headers"] = {
     "x-rapidapi-host": "kanjialive-api.p.rapidapi.com",
     "x-rapidapi-key": api["key"]
